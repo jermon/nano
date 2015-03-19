@@ -1,0 +1,17 @@
+  - name: Install nano
+    yum: name={{ item }} state=present
+    with_items:
+      - nano
+      - git
+
+  - name: Get github nanorc/nanorc
+    git: repo=https://github.com/nanorc/nanorc
+         dest=/tmp/nano
+
+  - name: make .nano
+    command: make install 
+             chdir=/tmp/nano
+             creates=~/.nano
+
+  - name: make nanorc
+    copy: src=nanorc dest=~/.nanorc owner=root group=root mode=0644
