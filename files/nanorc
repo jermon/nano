@@ -1,6 +1,3 @@
-bind F11 copytext main
-bind F12 mark main
-
 include "/usr/share/nano/c.nanorc"
 include "/usr/share/nano/python.nanorc"
 include "/usr/share/nano/sh.nanorc"

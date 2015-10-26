@@ -3,6 +3,7 @@
     with_items:
       - nano
       - git
+      - man
 
   - name: Get github nanorc/nanorc
     git: repo=https://github.com/nanorc/nanorc
@@ -15,3 +16,15 @@
 
   - name: make nanorc
     copy: src=nanorc dest=~/.nanorc owner=root group=root mode=0644
+
+  - name: What version of git do we have?
+    shell: man nanorc|grep 'KEY BINDINGS'|true
+    register: nano_KEY_BINDINGS
+    ignore_errors: true
+
+  - name: Bind keys
+    lineinfile: dest=~/.nanorc regexp="" line=""
+    when: nano_KEY_BINDINGS == 'KEY BINDINGS'
+    with_items:
+      - { regexp: '^bind F11', line: 'bind F11 copytext main' }
+      - { regexp: '^bind F12', line: 'bind F12 mark main' }
