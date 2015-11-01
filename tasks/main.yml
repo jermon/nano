@@ -13,16 +13,15 @@
              chdir=/tmp/nano
              creates=~/.nano
 
-  - name: make nanorc
-    copy: src=nanorc dest=~/.nanorc owner=root group=root mode=0644
-
   - name: What version of git do we have?
     shell: rpm -q nano|cut -d- -f2
     register: nano_version
 
-  - name: Bind keys
-    lineinfile: dest=~/.nanorc regexp="{{ item.regexp }}" line="{{ item.line }}"
+  - name: make nanorc
+    copy: src=nanorc22 dest=~/.nanorc owner=root group=root mode=0644
     when: "{{ nano_version.stdout | version_compare('2.1', '>=', strict=True) }}"
-    with_items:
-      - { regexp: '^bind F11', line: 'bind F11 copytext main' }
-      - { regexp: '^bind F12', line: 'bind F12 mark main' }
+    
+  - name: make nanorc
+    copy: src=nanorc dest=~/.nanorc owner=root group=root mode=0644
+    when: "{{ nano_version.stdout | version_compare('2.1', '<', strict=True) }}"
+
