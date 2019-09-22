@@ -1,12 +1,15 @@
   - name: Install nano
-    yum: name={{ item }} state=present
+    yum: 
+      name: "{{ item }}"
+      state: present
     with_items:
       - nano
       - git
 
   - name: Get github nanorc/nanorc
-    git: repo=https://github.com/nanorc/nanorc
-         dest=/tmp/nano
+    git: 
+      repo: "https://github.com/nanorc/nanorc"
+      dest: /tmp/nano
 
   - name: make .nano
     command: make install 
@@ -18,10 +21,20 @@
     register: nano_version
 
   - name: make nanorc
-    copy: src=nanorc22 dest=~/.nanorc owner=root group=root mode=0644
+    copy: 
+      src: nanorc22 
+      dest: "~/.nanorc" 
+      owner: root
+      group: root
+      mode: 0644
     when: "{{ nano_version.stdout | version_compare('2.1', '>=', strict=True) }}"
     
   - name: make nanorc
-    copy: src=nanorc dest=~/.nanorc owner=root group=root mode=0644
+    copy: 
+      src: nanorc
+      dest: "~/.nanorc"
+      owner: root
+      group: root
+      mode: 0644
     when: "{{ nano_version.stdout | version_compare('2.1', '<', strict=True) }}"
 
